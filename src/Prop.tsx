@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { CountContext } from "./context";
 
 //this has setCount
+//wrap to anyone who wants to use the teleported value inside a provider
 const Prop: React.FC = () => {
   const [count, setCount] = useState<number>(0);
 
   return (
     <div>
-      <Count count={count} setCount={setCount} />
+      <CountContext.Provider value={count}>
+        <Count setCount={setCount} />
+      </CountContext.Provider>
     </div>
   );
 };
@@ -14,26 +18,32 @@ const Prop: React.FC = () => {
 //we cannot directly add the arguments in the function in typescript we need to define it
 //this has to pass setCount to buttons
 type CountProps = {
-  count: number;
   setCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const Count: React.FC<CountProps> = ({ count, setCount }) => {
+//this does not pass the count to give it to CountRenderer
+const Count: React.FC<CountProps> = ({ setCount }) => {
   return (
     <div>
-      {count}
-      <Button count={count} setCount={setCount} />
+      <CountRenderer />
+      <Button setCount={setCount} />
     </div>
   );
 };
 
+//now we have the access of the count value inside the component without passing it through Count component
+const CountRenderer: React.FC = () => {
+  const count = useContext(CountContext);
+  return <div>{count}</div>;
+};
+
 type ButtonProps = {
-  count: number;
   setCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 //This need setCount
-const Button: React.FC<ButtonProps> = ({ count, setCount }) => {
+const Button: React.FC<ButtonProps> = ({ setCount }) => {
+  const count = useContext(CountContext);
   return (
     <div>
       <button onClick={() => setCount(count + 1)}>Increment</button>
