@@ -5,8 +5,7 @@ const Prop: React.FC = () => {
 
   return (
     <div>
-      <Count count={count} />
-      <Button count={count} setCount={setCount} />
+      <Count count={count} setCount={setCount} />
     </div>
   );
 };
@@ -14,10 +13,16 @@ const Prop: React.FC = () => {
 //we cannot directly add the arguments in the function in typescript we need to define it
 type CountProps = {
   count: number;
+  setCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const Count: React.FC<CountProps> = ({ count }) => {
-  return <div>{count}</div>;
+const Count: React.FC<CountProps> = ({ count, setCount }) => {
+  return (
+    <div>
+      {count}
+      <Button count={count} setCount={setCount} />
+    </div>
+  );
 };
 
 type ButtonProps = {
