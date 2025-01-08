@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+//this has setCount
 const Prop: React.FC = () => {
   const [count, setCount] = useState<number>(0);
 
@@ -11,6 +12,7 @@ const Prop: React.FC = () => {
 };
 
 //we cannot directly add the arguments in the function in typescript we need to define it
+//this has to pass setCount to buttons
 type CountProps = {
   count: number;
   setCount: React.Dispatch<React.SetStateAction<number>>;
@@ -29,6 +31,8 @@ type ButtonProps = {
   count: number;
   setCount: React.Dispatch<React.SetStateAction<number>>;
 };
+
+//This need setCount
 const Button: React.FC<ButtonProps> = ({ count, setCount }) => {
   return (
     <div>
