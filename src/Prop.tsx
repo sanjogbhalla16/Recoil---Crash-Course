@@ -57,54 +57,55 @@
 // export default Prop;
 
 //--------------------FOR RECOIL---------------------------
-import React, { useContext, useState } from "react";
-import { CountContext } from "./context";
+import React from "react";
+import countAtom, { evenSelector } from "./store/atoms/count";
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 
 //this has setCount
 //wrap to anyone who wants to use the teleported value inside a provider
 const Prop: React.FC = () => {
-  const [count, setCount] = useState<number>(0);
-
   return (
     <div>
-      <CountContext.Provider value={count}>
-        <Count setCount={setCount} />
-      </CountContext.Provider>
+      <RecoilRoot>
+        <Count />
+      </RecoilRoot>
     </div>
   );
 };
 
 //we cannot directly add the arguments in the function in typescript we need to define it
 //this has to pass setCount to buttons
-type CountProps = {
-  setCount: React.Dispatch<React.SetStateAction<number>>;
-};
 
 //this does not pass the count to give it to CountRenderer
-const Count: React.FC<CountProps> = ({ setCount }) => {
+const Count: React.FC = () => {
   console.log("re-renders");
-
   return (
     <div>
       <CountRenderer />
-      <Button setCount={setCount} />
+      <Button />
     </div>
   );
 };
 
 //now we have the access of the count value inside the component without passing it through Count component
 const CountRenderer: React.FC = () => {
-  const count = useContext(CountContext);
-  return <div>{count}</div>;
+  const count = useRecoilValue(countAtom);
+  return (
+    <div>
+      {count}
+      <EvenCountRenderer />
+    </div>
+  );
 };
 
-type ButtonProps = {
-  setCount: React.Dispatch<React.SetStateAction<number>>;
+const EvenCountRenderer: React.FC = () => {
+  const isEven = useRecoilValue(evenSelector);
+  return <div>{isEven ? "is Even" : null}</div>;
 };
 
 //This need setCount
-const Button: React.FC<ButtonProps> = ({ setCount }) => {
-  const count = useContext(CountContext);
+const Button: React.FC = () => {
+  const [count, setCount] = useRecoilState(countAtom);
   return (
     <div>
       <button onClick={() => setCount(count + 1)}>Increment</button>
