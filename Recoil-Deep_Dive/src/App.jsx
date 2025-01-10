@@ -1,35 +1,98 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// import "./App.css";
+// import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
+// import { jobAtom, networkAtom, NotificationAtom, MessageAtom } from "./atom";
+
+// //Any atom or any hook you want to use need to be wrapped inside the RecoilRoot
+
+// function App() {
+//   return (
+//     <div>
+//       <RecoilRoot>
+//         <MainApp />
+//       </RecoilRoot>
+//     </div>
+//   );
+// }
+
+// function MainApp() {
+//   const networkCount = useRecoilValue(networkAtom);
+//   const jobCount = useRecoilValue(jobAtom);
+//   const notificationCount = useRecoilValue(NotificationAtom);
+//   const [messagingCount, setMessagingCount] = useRecoilState(MessageAtom);
+//   return (
+//     <>
+//       <button>Home</button>
+
+//       <button>
+//         My Network(
+//         {networkCount >= 100 ? "99+" : networkCount})
+//       </button>
+//       <button>Jobs({jobCount})</button>
+//       <button>Messaging({messagingCount})</button>
+//       <button>Notification({notificationCount})</button>
+//       <button
+//         onClick={() => {
+//           setMessagingCount(messagingCount + 1);
+//         }}
+//       >
+//         Me
+//       </button>
+//     </>
+//   );
+// }
+
+// export default App;
+
+//---------------useSetRecoilState------------------
+import "./App.css";
+import { RecoilRoot, useSetRecoilState, useRecoilValue } from "recoil";
+import { jobAtom, networkAtom, NotificationAtom, MessageAtom } from "./atom";
+
+//Any atom or any hook you want to use need to be wrapped inside the RecoilRoot
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <RecoilRoot>
+        <MainApp />
+      </RecoilRoot>
+    </div>
+  );
 }
 
-export default App
+function MainApp() {
+  const networkCount = useRecoilValue(networkAtom);
+  const jobCount = useRecoilValue(jobAtom);
+  const notificationCount = useRecoilValue(NotificationAtom);
+  const messagingCount = useRecoilValue(MessageAtom);
+  return (
+    <>
+      <button>Home</button>
+
+      <button>
+        My Network(
+        {networkCount >= 100 ? "99+" : networkCount})
+      </button>
+      <button>Jobs({jobCount})</button>
+      <button>Messaging({messagingCount})</button>
+      <button>Notification({notificationCount})</button>
+      <ButtonUpdater />
+    </>
+  );
+}
+
+function ButtonUpdater() {
+  const setMessagingCount = useSetRecoilState(MessageAtom);
+
+  return (
+    <button
+      onClick={() => {
+        setMessagingCount((c) => c + 1);
+      }}
+    >
+      Me
+    </button>
+  );
+}
+
+export default App;
